@@ -2,11 +2,11 @@ const menuModel = require('../model/menu')
 
 const getMenuList = async (ctx) => {
     await menuModel.find({}, (err, res) => {
-        console.log(res);
         let data = res.map(item => {
             return {
                 id: item._id,
                 title: item.title,
+                icon: item.icon,
                 parentId: item.parentId,
                 url: item.url
             }
