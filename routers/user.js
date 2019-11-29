@@ -2,12 +2,11 @@ const Router = require('koa-router')
 
 const router = new Router()
 
+const { login, register, getUserList } = require('../controllers/user')
 
-router.get('/', (ctx) => {
-    ctx.body = {
-        code: 300
-    }
-})
+router
+    .post('/register', register)
+    .post('/login', login)
 
 
 module.exports = router.routes()
