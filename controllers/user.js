@@ -1,6 +1,7 @@
 const UserModel = require('../model/user')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
+const { TOKEN_KEY } = require('../config/index')
 
 const login = async (ctx) => {
     let data = ctx.request.body
@@ -20,7 +21,7 @@ const login = async (ctx) => {
                 const token = jsonwebtoken.sign({
                     userName: user.userName,
                     password: user.password
-                }, 'myToken', { expiresIn: '2h' })
+                }, TOKEN_KEY, { expiresIn: '2h' })
                 return ctx.body = {
                     code: 200,
                     data: {

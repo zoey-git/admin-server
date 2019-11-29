@@ -11,7 +11,7 @@ const getMenuList = async (ctx) => {
                 url: item.url
             }
         })
-        ctx.body = {
+        return ctx.body = {
             code: 200,
             data: data
         }
@@ -21,12 +21,15 @@ const getMenuList = async (ctx) => {
 const addMenu = async (ctx) => {
     const menu = new menuModel(ctx.request.body)
     await menu.save().then(res => {
-        ctx.body = {
+        return ctx.body = {
             code: 200,
             msg: '添加成功'
         }
     }).catch((err) => {
-        console.log(err);
+        ctx.body = {
+            code: 201,
+            msg: err
+        }
     })
 }
 
