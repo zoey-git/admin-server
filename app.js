@@ -5,6 +5,7 @@ const { IGNORE_ROUTERS, TOKEN_KEY } = require('./config/index')
 const { checkToken } = require('./utils/index')
 const menu = require('./routers/menu')
 const user = require('./routers/user')
+const role = require('./routers/role')
 
 const app = new Koa()
 
@@ -13,6 +14,7 @@ const router = new Router()
 
 router.use('/menu', menu)
 router.use('/user', user)
+router.use('/role', role)
 
 app.use(bodyParser())
 app.use(checkToken(TOKEN_KEY, IGNORE_ROUTERS))
