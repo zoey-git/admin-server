@@ -11,7 +11,7 @@ const checkToken = (tokenKey, ignoreRouters) => {
         let token = ctx.request.headers.authorization || ''
         if (!token) {
             return ctx.body = {
-                code: 400,
+                code: 302,
                 msg: 'token is not'
             }
         }
@@ -19,7 +19,7 @@ const checkToken = (tokenKey, ignoreRouters) => {
         await jsonwebtoken.verify(token, tokenKey, (err, payload) => {
             if (err) {
                 return ctx.body = {
-                    code: '400',
+                    code: '302',
                     msg: err
                 }
             }
