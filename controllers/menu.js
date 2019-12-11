@@ -1,6 +1,37 @@
 const menuModel = require('../model/menu')
+const roleUser = require('../model/role_user')
+const roleMenuModel = require('../model/role_menu')
 
 const getMenuList = async (ctx) => {
+    let user = ctx.query
+    if (!user.userId) {
+        return ctx.body = {
+            code: 202,
+            msg: '参数不全'
+        }
+    }
+    let res = await roleUser.findOne({userId: user.userId}, (err, res) => {
+        return res
+    })    
+    let roleMenu = await roleMenuModel.findOne({ roleId: res.roleId })
+    await menuModel.find({ _id: roleMenu.menuId.split(',') }, (err, res) => {
+        let data = res.map(item => {
+            return {
+                id: item._id,
+                title: item.title,
+                icon: item.icon,
+                parentId: item.parentId,
+                url: item.url
+            }
+        })
+        return ctx.body = {
+            code: 200,
+            data: data
+        }
+    })
+}
+
+const getMenuListAll = async (ctx)=> {
     await menuModel.find({}, (err, res) => {
         let data = res.map(item => {
             return {
@@ -68,6 +99,7 @@ const delMenu = async (ctx) => {
 
 module.exports = {
     getMenuList,
+    getMenuListAll,
     addMenu,
     changeMenu,
     delMenu

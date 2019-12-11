@@ -1,4 +1,5 @@
 const UserModel = require('../model/user')
+const RoleUserModel = require('../model/role_user')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 const { TOKEN_KEY } = require('../config/index')
@@ -26,6 +27,7 @@ const login = async (ctx) => {
                     code: 200,
                     data: {
                         userName: user.userName,
+                        userId: user._id,
                         token: token
                     },
                     msg: '登录成功'
@@ -51,11 +53,17 @@ const register = async (ctx) => {
         userName: data.userName,
         password: password
     })
-    await user.save().then((res) => {
-        ctx.body = {
-            code: 200,
-            data: '注册成功'
-        }
+    await user.save().then(async (res) => {
+        let roleUser = new RoleUserModel({
+            roleId: data.roleId,
+            userId: res._id
+        })
+        await roleUser.save().then(res => {
+            ctx.body = {
+                code: 200,
+                data: '注册成功'
+            }
+        })
     }).catch((err) => {
         if(err.code === 11000) {
             ctx.body = {
@@ -66,8 +74,19 @@ const register = async (ctx) => {
     })
 }
 
-const getUserList = () => {
-
+const getUserList = async (ctx) => {
+    await UserModel.find({}, (err, res) => {
+        if (err) {
+            return ctx.body = {
+                code: 201,
+                msg: err
+            }
+        }
+        ctx.body = {
+            code: 200,
+            data: res
+        }
+    })
 }
 
 module.exports = {
