@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 
 const RoleUserSchema = new Schema({
-    roleId: { type: String },
+    roleId: { type: String, default: '5dee02f287cb615890e4d666' },
     userId: { type: String },
 }, {
     timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
