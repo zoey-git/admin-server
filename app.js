@@ -1,6 +1,7 @@
 const Koa = require('koa')
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
+const body = require('koa-body')
 const { IGNORE_ROUTERS, TOKEN_KEY } = require('./config/index')
 const { checkToken } = require('./utils/index')
 const menu = require('./routers/menu')
@@ -18,7 +19,7 @@ router.use('/user', user)
 router.use('/role', role)
 router.use('/upload', upload)
 
-app.use(bodyParser({
+app.use(body({
     multipart: true,
     formidable: {
         maxFileSize: 200 * 1024 * 1024   
@@ -27,7 +28,6 @@ app.use(bodyParser({
 
 app.use(checkToken(TOKEN_KEY, IGNORE_ROUTERS))
 app.use(router.routes())
-
 
 app.use(async (ctx, next) => {
     next()
