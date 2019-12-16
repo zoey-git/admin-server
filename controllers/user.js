@@ -22,7 +22,7 @@ const login = async (ctx) => {
                 const token = jsonwebtoken.sign({
                     userName: user.userName,
                     password: user.password
-                }, TOKEN_KEY, { expiresIn: '2h' })
+                }, TOKEN_KEY, { expiresIn: '1h' })
                 return ctx.body = {
                     code: 200,
                     data: {

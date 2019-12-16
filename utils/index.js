@@ -16,14 +16,17 @@ const checkToken = (tokenKey, ignoreRouters) => {
             }
         }
         token = token.replace('Bearer ', '')
-        await jsonwebtoken.verify(token, tokenKey, (err, payload) => {
+        let res = await jsonwebtoken.verify(token, tokenKey, (err, payload) => { 
             if (err) {
-                return ctx.body = {
-                    code: '302',
-                    msg: err
-                }
+                return err
             }
         })
+        if (res) {
+            return ctx.body = {
+                code: 302,
+                msg: res
+            }
+        }        
         await next()
     }
 }

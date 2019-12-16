@@ -12,7 +12,7 @@ const getMenuList = async (ctx) => {
     }
     let res = await roleUser.findOne({userId: user.userId}, (err, res) => {
         return res
-    })    
+    })
     let roleMenu = await roleMenuModel.findOne({ roleId: res.roleId })
     await menuModel.find({ _id: roleMenu.menuId.split(',') }, (err, res) => {
         let data = res.map(item => {
