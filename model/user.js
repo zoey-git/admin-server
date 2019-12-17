@@ -7,6 +7,7 @@ const UserSchema = new Schema({
     password: { type: String, required: true },
     updateTime: { type: Date },
     createTime: { type: Date },
+    head: { type: String, required: false },
     LoginTime: Date,
     lastLoginTime: Date
 }, {

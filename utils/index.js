@@ -1,13 +1,13 @@
 const jsonwebtoken = require('jsonwebtoken')
-
+const os = require('os');
 
 const checkToken = (tokenKey, ignoreRouters) => {
     return async (ctx, next) => {
         let url = ctx.request.url
         // 对安全路由不验证token
-        if (ignoreRouters.includes(url)) {
+        if (ignoreRouters.includes(url) || ctx.request.url.includes('/head/')) {
             return next()
-        }
+        }       
         let token = ctx.request.headers.authorization || ''
         if (!token) {
             return ctx.body = {
@@ -31,6 +31,21 @@ const checkToken = (tokenKey, ignoreRouters) => {
     }
 }
 
+const getIP = () => {
+    let IP = ''
+    let interfaces = os.networkInterfaces()
+    Object.keys(interfaces).map(item => {
+        interfaces[item].find(item => {
+            if(item.family === 'IPv4' && item.address !== '127.0.0.1' && !item.internal){
+                return IP = item.address;  
+            }
+        })
+    })
+    return IP
+}
+
+
 module.exports = {
-    checkToken
+    checkToken,
+    getIP
 }

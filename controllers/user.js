@@ -3,6 +3,7 @@ const RoleUserModel = require('../model/role_user')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 const { TOKEN_KEY } = require('../config/index')
+const { IP, HOST } = require('../config/index')
 
 const login = async (ctx) => {
     let data = ctx.request.body
@@ -28,7 +29,8 @@ const login = async (ctx) => {
                     data: {
                         userName: user.userName,
                         userId: user._id,
-                        token: token
+                        token: token,
+                        head: `http://${IP}:${HOST}${user.head}`
                     },
                     msg: '登录成功'
                 }
@@ -89,8 +91,36 @@ const getUserList = async (ctx) => {
     })
 }
 
+const updateHead = async (ctx) => {
+    let { userId, headUrl } = ctx.request.body
+    if (!userId || !headUrl) {
+        return ctx.body = {
+            code: 201,
+            msg: '参数不全'
+        }
+    }
+    await UserModel.findByIdAndUpdate(userId, { head: headUrl.match(/\/head\/.*/)[0]}, (err, res) => {
+        if (err) {
+            return ctx.body = {
+                code: 201,
+                msg: err
+            }
+        }
+        let user = res
+        return ctx.body = {
+            code: 200,
+            data: {
+                userName: user.userName,
+                userId: user._id,
+                head: `http://${IP}:${HOST}${user.head}`
+            }
+        }
+    })
+}
+
 module.exports = {
     login,
     register,
-    getUserList
+    getUserList,
+    updateHead
 }
