@@ -10,7 +10,7 @@ const user = require('./routers/user')
 const role = require('./routers/role')
 const upload = require('./routers/upload')
 const path = require('path')
-
+const session = require('koa-session')
 const app = new Koa()
 
 
@@ -23,10 +23,16 @@ router.use('/upload', upload)
 
 app.use(body({
     multipart: true,
+    strict:false,
     formidable: {
         maxFileSize: 200 * 1024 * 1024   
     }
 }))
+
+app.keys = ['some secret hurr']
+app.use(session({
+    httpOnly: true
+}, app))
 
 app.use(checkToken(TOKEN_KEY, IGNORE_ROUTERS))
 app.use(router.routes())

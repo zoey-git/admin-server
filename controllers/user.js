@@ -1,12 +1,25 @@
 const UserModel = require('../model/user')
 const RoleUserModel = require('../model/role_user')
 const bcrypt = require('bcrypt')
+const svgCaptcha = require('svg-captcha')
 const jsonwebtoken = require('jsonwebtoken')
 const { TOKEN_KEY } = require('../config/index')
 const { IP, HOST } = require('../config/index')
 
 const login = async (ctx) => {
     let data = ctx.request.body
+    if (!data.captcha) {
+        return ctx.body = {
+            code: 201,
+            msg: '参数错误'
+        }
+    }
+    if ((data.captcha !== ctx.session.captcha)) {
+        return ctx.body = {
+            code: 201,
+            msg: '验证码错误'
+        }
+    }
     await UserModel.find({
         userName: data.userName
     }, (err, res) => {
@@ -118,9 +131,27 @@ const updateHead = async (ctx) => {
     })
 }
 
+const captcha = async (ctx) => {
+    let captcha = svgCaptcha.create({
+        inverse: false,
+        fontSize: 48,
+        width: 100,
+        height: 40,
+        size: 6
+    })
+    ctx.session.captcha = captcha.text.toLowerCase();
+    return ctx.body = {
+        code: 200,
+        data: {
+            url: captcha.data
+        }
+    }
+}
+
 module.exports = {
     login,
     register,
     getUserList,
-    updateHead
+    updateHead,
+    captcha
 }

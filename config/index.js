@@ -1,7 +1,7 @@
 const { getIP } = require('../utils/index')
 
 
-const IGNORE_ROUTERS = ['/user/login', '/user/register']
+const IGNORE_ROUTERS = ['/user/login', '/user/register', '/user/captcha']
 
 const TOKEN_KEY = 'myToken'
 

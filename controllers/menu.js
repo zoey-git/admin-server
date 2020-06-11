@@ -13,7 +13,7 @@ const getMenuList = async (ctx) => {
     let res = await roleUser.findOne({userId: user.userId}, (err, res) => {
         return res
     })
-    let roleMenu = await roleMenuModel.findOne({ roleId: res.roleId })
+    // let roleMenu = await roleMenuModel.findOne({ roleId: res.roleId })
     
     // await menuModel.find({ _id: roleMenu.menuId.split(',') }, (err, res) => {
     await menuModel.find({ }, (err, res) => {
@@ -84,6 +84,8 @@ const changeMenu = async (ctx) => {
 
 const delMenu = async (ctx) => {
     let data = ctx.request.body
+    console.log(data);
+    
     await menuModel.deleteOne({ _id: data.id }, (err, res) => {
         if (err) {
             return ctx.body = {
