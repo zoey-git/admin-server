@@ -5,7 +5,7 @@ const checkToken = (tokenKey, ignoreRouters) => {
     return async (ctx, next) => {
         let url = ctx.request.url
         // 对安全路由不验证token
-        if (ignoreRouters.includes(url) || ctx.request.url.includes('/head/excel/')) {
+        if (ignoreRouters.includes(url) || ctx.request.url.includes('/head/excel/') || ctx.request.url.includes('/head/')) {
             return next()
         }       
         let token = ctx.request.headers.authorization || ''
