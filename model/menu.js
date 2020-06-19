@@ -7,6 +7,7 @@ const menuSchema = new Schema({
     icon: String,
     url: String,
     parentId: { type: String, required: true, default: -1 },
+    order: { type: Number, required: true },
     updated: {type: Date, default: Date.now}
 })
 

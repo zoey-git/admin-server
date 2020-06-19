@@ -23,7 +23,8 @@ const getMenuList = async (ctx) => {
                 title: item.title,
                 icon: item.icon,
                 parentId: item.parentId,
-                url: item.url
+                url: item.url,
+                order: item.order
             }
         })
         return ctx.body = {
@@ -41,7 +42,8 @@ const getMenuListAll = async (ctx)=> {
                 title: item.title,
                 icon: item.icon,
                 parentId: item.parentId,
-                url: item.url
+                url: item.url,
+                order: item.order
             }
         })
         return ctx.body = {
@@ -52,7 +54,15 @@ const getMenuListAll = async (ctx)=> {
 }
 
 const addMenu = async (ctx) => {
-    const menu = new menuModel(ctx.request.body)
+    let {title, url, icon, parentId, order} = ctx.request.body
+    if (!title) {
+        ctx.body = { code: 201, msg: '参数title不能为空' }
+    }
+    debugger
+    if (parentId !== -1 && !url) {
+        ctx.body = { code: 201, msg: '参数url不能为空' }
+    }
+    const menu = new menuModel({ title, url, icon, parentId, order })
     await menu.save().then(res => {
         return ctx.body = {
             code: 200,
