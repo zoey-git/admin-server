@@ -58,7 +58,6 @@ const addMenu = async (ctx) => {
     if (!title) {
         ctx.body = { code: 201, msg: '参数title不能为空' }
     }
-    debugger
     if (parentId !== -1 && !url) {
         ctx.body = { code: 201, msg: '参数url不能为空' }
     }
