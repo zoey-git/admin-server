@@ -9,6 +9,7 @@ const menu = require('./routers/menu')
 const user = require('./routers/user')
 const role = require('./routers/role')
 const upload = require('./routers/upload')
+const demo = require('./routers/demo')
 const path = require('path')
 const session = require('koa-session')
 const app = new Koa()
@@ -20,6 +21,7 @@ router.use('/menu', menu)
 router.use('/user', user)
 router.use('/role', role)
 router.use('/upload', upload)
+router.use('/demo', demo)
 
 app.use(body({
     multipart: true,

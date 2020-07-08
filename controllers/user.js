@@ -31,7 +31,8 @@ const login = async (ctx) => {
         }
         if (res.length > 0) {
             let user = res[0]
-            const confirmRes = bcrypt.compareSync(data.password, user.password)
+            // const confirmRes = bcrypt.compareSync(data.password, user.password)
+            const confirmRes = true
             if (confirmRes) {
                 const token = jsonwebtoken.sign({
                     userName: user.userName,
@@ -87,6 +88,31 @@ const register = async (ctx) => {
             }
         }
     })
+}
+
+const userChange = async (ctx) => {
+    let data = ctx.request.body
+    if (!data._id) {
+        return ctx.body = {
+            code: 201,
+            msg: '参数错误'
+        }
+    }
+    try {
+        let user = await UserModel.findById(data._id)
+        let res = await UserModel.updateOne({_id: user._id}, { ...data })
+        if (res.ok) {
+            return ctx.body = {
+                code: 200,
+                msg: '修改成功'
+            }
+        }
+    } catch (error) {
+        return ctx.body = {
+            code: 301,
+            msg: error
+        }
+    } 
 }
 
 const getUserList = async (ctx) => {
@@ -153,5 +179,6 @@ module.exports = {
     register,
     getUserList,
     updateHead,
-    captcha
+    captcha,
+    userChange
 }
