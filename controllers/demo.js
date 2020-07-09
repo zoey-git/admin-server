@@ -37,7 +37,7 @@ const getDemoList = async (ctx) => {
 }
 
 const addDemo = async (ctx) => {
-    let { name, address } = ctx.request.body
+    let { name, address, birth, startTime, status } = ctx.request.body
     if (!name) {
         return ctx.body = {
             code: 301,
@@ -46,7 +46,10 @@ const addDemo = async (ctx) => {
     }
     let demo = new DemoModel({
         name: name,
-        address: address
+        address: address,
+        birth: birth,
+        startTime: startTime,
+        status: status
     })
     await demo.save()
     return ctx.body = {
@@ -77,8 +80,33 @@ const update = async (ctx) => {
     }
 }
 
+const del = async (ctx) => {
+    let { _id } = ctx.request.body
+    if (!_id) {
+        return ctx.body = {
+            code: 301,
+            data: '参数不全'
+        }
+    }
+    let res = await DemoModel.deleteOne({ _id: _id })
+    if (res.ok) {
+        return ctx.body = {
+            code: 200,
+            msg: '删除成功'
+        }
+    } else {
+        return ctx.body = {
+            code: 301,
+            msg: '删除失败'
+        }
+    }
+    
+}
+
+
 module.exports = {
     getDemoList,
     addDemo,
-    update
+    update,
+    del
 }
